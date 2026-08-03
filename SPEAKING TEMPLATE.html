@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Part 2: Person (Interactive)</title>
+    <style>
+        :root {
+            --primary-color: #e24a4a; /* Đổi màu chủ đạo sang đỏ/cam cho khác file cũ */
+            --secondary-color: #f5f7fa;
+            --text-color: #333;
+            --border-color: #ddd;
+            --success-color: #28a745;
+            --highlight-color: #fff3cd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #fff0f0; /* Nền hơi hồng nhẹ */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            background: var(--secondary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            min-width: 200px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .template-box {
+            background-color: #feefef;
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .sample-box {
+            display: none;
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            white-space: pre-line;
+        }
+
+        .toggle-sample-btn {
+            background: none;
+            border: 1px solid #ffc107;
+            color: #d39e00;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.85em;
+            transition: background 0.2s;
+        }
+
+        .toggle-sample-btn:hover {
+            background: #fff3cd;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(226, 74, 74, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        button.main-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.1s;
+        }
+
+        button.main-btn:active {
+            transform: scale(0.98);
+        }
+
+        #previewBtn { background-color: #17a2b8; }
+        #exportBtn { background-color: var(--success-color); }
+        #clearStorageBtn { background-color: #dc3545; font-size: 0.8em; padding: 5px 10px; margin-left: auto;}
+
+        /* --- STYLES CHO PHẦN PREVIEW TƯƠNG TÁC --- */
+        #interactiveResultArea {
+            display: none; /* Ẩn mặc định */
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #fff;
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        #interactiveResultArea h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        #textContent {
+            font-size: 1.15em;
+            line-height: 1.8;
+            color: #2c3e50;
+            white-space: pre-wrap;
+        }
+
+        .word-span {
+            cursor: pointer;
+            padding: 2px 0;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .word-span:hover {
+            background-color: #ffdad0;
+            color: #0c5460;
+        }
+
+        .word-span:active {
+            background-color: #ffc107;
+        }
+
+        .note-text {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 15px;
+            font-style: italic;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>👤 IELTS Speaking Part 2: Person Description</h1>
+
+    <div class="controls">
+        <label for="topicSelect"><strong>Chọn mẫu tham khảo (Samples):</strong></label>
+        <select id="topicSelect" onchange="loadSamples()">
+            <option value="friend">Best Friend (Minh)</option>
+            <option value="teacher">Teacher (Mrs. Lan)</option>
+            <option value="family">Family Member (Grandmother)</option>
+            <option value="famous">Famous Person (Elon Musk)</option>
+        </select>
+        <button id="clearStorageBtn" onclick="clearMyData()">🗑️ Xóa dữ liệu đã lưu</button>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">1. Introduction (3.1 Thông tin cơ bản)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-intro')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "Well, this topic reminds me of [Tên người], a person I’ve known for a very long time ago."
+        </div>
+        <div id="sample-intro" class="sample-box"></div>
+        <textarea id="input-intro" placeholder="Giới thiệu người đó là ai..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">2. Context of Meeting (3.2 Bối cảnh gặp gỡ)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-bg')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "My recollection of the first time we met is very hazy, because we go way back. But if memory serves right, we were classmates at [địa điểm/thời gian]..."
+        </div>
+        <div id="sample-bg" class="sample-box"></div>
+        <textarea id="input-bg" placeholder="Bạn gặp người đó khi nào, ở đâu..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">3. Appearance & Personality (3.2 Ngoại hình & Tính cách)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-usage')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "I was so impressed because of his/her [ngoại hình]. Everyone around him/her knows that he/she is [tính cách]. Plus, another special thing about him/her is that..."
+        </div>
+        <div id="sample-usage" class="sample-box"></div>
+        <textarea id="input-usage" placeholder="Mô tả ngoại hình và tính cách đặc biệt..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">4. Shared Memory & Feelings (3.2 Kỷ niệm & 3.3 Cảm nhận)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-imp')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "We’ve had so many unforgettable memories together, but to tell you about one, it would have to be [kỷ niệm]. [Tên] is the person I hold in high regard simply because [lý do]..."
+        </div>
+        <div id="sample-imp" class="sample-box"></div>
+        <textarea id="input-imp" placeholder="Kể một kỷ niệm và cảm nhận về người đó..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">5. Conclusion (3.4 Kết bài)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-con')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "All in all, that is all I have to say about [Tên người]."
+        </div>
+        <div id="sample-con" class="sample-box"></div>
+        <textarea id="input-con" placeholder="Kết luận ngắn gọn..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="action-buttons">
+        <button id="previewBtn" class="main-btn" onclick="generateInteractivePreview()">🔊 Preview & Speak</button>
+        <button id="exportBtn" class="main-btn" onclick="exportToDoc()">💾 Xuất file Word</button>
+    </div>
+
+    <div id="interactiveResultArea">
+        <h3>🎙️ Khu vực luyện tập (Interactive Area)</h3>
+        <div id="textContent"></div>
+        <div class="note-text">👉 Click vào từ để nghe phát âm từ đó. <br>👉 Bôi đen một câu/cụm từ để nghe cả đoạn.</div>
+    </div>
+</div>
+
+<script>
+    // --- 1. CONFIGURATION & DATA ---
+    const samples = {
+        friend: { 
+            intro: "Well, this topic reminds me of Minh, a person I’ve known for a very long time ago.", 
+            bg: "My recollection of the first time we met is very hazy, because we go way back. But if memory serves right, we were classmates at primary school, sitting right next to each other.", 
+            usage: "I was so impressed because of his bright smile and energetic vibe. Everyone around him knows that he is incredibly optimistic and supportive. Plus, another special thing about him is that he has a great sense of humor.", 
+            imp: "We’ve had so many unforgettable memories together, but to tell you about one, it would have to be our summer trip to Da Lat where we got lost in the rain. Minh is the person I hold in high regard simply because he always stands by my side when I face difficulties. Another thing that I like about Minh is that he is a great listener.", 
+            con: "All in all, that is all I have to say about Minh, my best friend." 
+        },
+        teacher: { 
+            intro: "Well, this topic reminds me of Mrs. Lan, a person I’ve known for a very long time ago, specifically since my high school years.", 
+            bg: "My recollection of the first time we met is quite vivid. It was the first day of grade 10, and she walked into our classroom as our homeroom teacher.", 
+            usage: "I was so impressed because of her elegant Ao Dai and gentle voice. Everyone around her knows that she is strict but fair. Plus, another special thing about her is that she can explain complex math problems in a very simple way.", 
+            imp: "We’ve had so many unforgettable memories together, but to tell you about one, it would have to be the time she spent extra hours tutoring me before the university entrance exam. Mrs. Lan is the person I hold in high regard simply because of her dedication to education. Another thing that I like about her is her patience.", 
+            con: "All in all, that is all I have to say about Mrs. Lan, a teacher I deeply respect." 
+        },
+        family: { 
+            intro: "Well, this topic reminds me of my grandmother, a person I’ve known for a very long time ago – basically my whole life.", 
+            bg: "My recollection of the first time we met is nonexistent because I was a baby, but I have grown up under her care.", 
+            usage: "I was so impressed because of her silver hair and warm, kind eyes. Everyone around her knows that she is traditional and kind-hearted. Plus, another special thing about her is that she cooks the best Pho in town.", 
+            imp: "We’ve had so many unforgettable memories together, but to tell you about one, it would have to be the nights she told me folktales before bed. She is the person I hold in high regard simply because she is the glue that holds our family together. Another thing that I like about her is her wisdom.", 
+            con: "All in all, that is all I have to say about my beloved grandmother." 
+        },
+        famous: { 
+            intro: "Well, this topic reminds me of Elon Musk, a person I’ve known about for a very long time ago through the news.", 
+            bg: "My recollection of the first time I 'met' him virtually is hazy. But if memory serves right, I first saw him on a tech documentary about PayPal.", 
+            usage: "I was so impressed because of his visionary ideas and determination. Everyone around him knows that he is a workaholic and a risk-taker. Plus, another special thing about him is that he aims to take humanity to Mars.", 
+            imp: "I haven't met him personally so we have no shared memories, but I follow his career closely. He is the person I hold in high regard simply because he dares to dream big. Another thing that I like about him is his resilience against failure.", 
+            con: "All in all, that is all I have to say about Elon Musk." 
+        }
+    };
+
+    const inputIds = ['input-intro', 'input-bg', 'input-usage', 'input-imp', 'input-con'];
+    
+    // Tạo Unique Key để không bị trùng với file Object
+    const storageKey = 'ielts_gen_person_data_' + window.location.pathname;
+
+    // --- 2. LOCAL STORAGE LOGIC ---
+    function autoSaveData() {
+        const dataToSave = {};
+        inputIds.forEach(id => {
+            dataToSave[id] = document.getElementById(id).value;
+        });
+        localStorage.setItem(storageKey, JSON.stringify(dataToSave));
+    }
+
+    function loadSavedData() {
+        const savedJSON = localStorage.getItem(storageKey);
+        if (savedJSON) {
+            const data = JSON.parse(savedJSON);
+            inputIds.forEach(id => {
+                if (data[id]) {
+                    document.getElementById(id).value = data[id];
+                }
+            });
+            console.log("Dữ liệu đã được tải lại từ: " + storageKey);
+        }
+    }
+
+    function clearMyData() {
+        if(confirm("Bạn có chắc muốn xóa toàn bộ nội dung đã lưu cho file này không?")) {
+            localStorage.removeItem(storageKey);
+            inputIds.forEach(id => document.getElementById(id).value = "");
+            document.getElementById('interactiveResultArea').style.display = "none";
+            alert("Đã xóa dữ liệu!");
+        }
+    }
+
+    // --- 3. CORE FUNCTIONS ---
+
+    // Load Samples
+    function loadSamples() {
+        const topic = document.getElementById('topicSelect').value;
+        const data = samples[topic];
+        
+        document.getElementById('sample-intro').innerText = data.intro;
+        document.getElementById('sample-bg').innerText = data.bg;
+        document.getElementById('sample-usage').innerText = data.usage;
+        document.getElementById('sample-imp').innerText = data.imp;
+        document.getElementById('sample-con').innerText = data.con;
+    }
+
+    function toggleSample(id) {
+        const x = document.getElementById(id);
+        x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+
+    // --- 4. PREVIEW & TTS LOGIC ---
+
+    function generateInteractivePreview() {
+        const resultArea = document.getElementById('interactiveResultArea');
+        const contentDiv = document.getElementById('textContent');
+        let fullHtml = "";
+        let hasContent = false;
+
+        inputIds.forEach(id => {
+            const text = document.getElementById(id).value.trim();
+            if (text) {
+                hasContent = true;
+                const words = text.split(/\s+/); 
+                
+                const processedParagraph = words.map(word => {
+                    return `<span class="word-span" onclick="speakText('${escapeSingleQuotes(word)}')">${word}</span>`;
+                }).join(' ');
+
+                fullHtml += `<p>${processedParagraph}</p>`;
+            }
+        });
+
+        if (!hasContent) {
+            alert("Bạn hãy nhập nội dung trước khi bấm Preview nhé!");
+            return;
+        }
+
+        contentDiv.innerHTML = fullHtml;
+        resultArea.style.display = "block";
+        resultArea.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function escapeSingleQuotes(str) {
+        return str.replace(/'/g, "\\'").replace(/[^\w\s\',.!?-]/g, ""); 
+    }
+
+    // Hàm đọc Text
+    function speakText(text) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US'; 
+        utterance.rate = 0.9; 
+        window.speechSynthesis.speak(utterance);
+    }
+
+    document.getElementById('textContent').addEventListener('mouseup', function() {
+        const selection = window.getSelection();
+        const selectedText = selection.toString().trim();
+
+        if (selectedText.length > 0) {
+            speakText(selectedText);
+        }
+    });
+
+    // --- 5. EXPORT LOGIC ---
+    function exportToDoc() {
+        let content = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Speaking Part 2 - Person</title></head><body>";
+        content += "<h1 style='color:#e24a4a'>IELTS Speaking Part 2 - Person Description</h1>";
+        
+        let hasContent = false;
+        inputIds.forEach(id => {
+            const val = document.getElementById(id).value;
+            if(val.trim()) {
+                hasContent = true;
+                let title = "";
+                if(id.includes('intro')) title = "Introduction";
+                if(id.includes('bg')) title = "Context of Meeting";
+                if(id.includes('usage')) title = "Appearance & Personality";
+                if(id.includes('imp')) title = "Shared Memory & Feelings";
+                if(id.includes('con')) title = "Conclusion";
+
+                content += `<h3 style='color:#555'>${title}</h3><p>${val}</p>`;
+            }
+        });
+
+        if (!hasContent) {
+            alert("Bạn hãy nhập nội dung trước khi xuất file nhé!");
+            return;
+        }
+        content += "</body></html>";
+
+        const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'My_Speaking_Person.doc';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // --- INIT ---
+    window.onload = function() {
+        loadSamples();
+        loadSavedData();
+    };
+
+</script>
+
+</body>
+</html>
