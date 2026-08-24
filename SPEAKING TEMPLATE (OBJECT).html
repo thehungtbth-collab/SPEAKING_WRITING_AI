@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Part 2: Object (Interactive)</title>
+    <style>
+        :root {
+            --primary-color: #2b7a78; /* Đổi màu chủ đạo sang xanh mòng két cho chủ đề Object */
+            --secondary-color: #def2f1;
+            --text-color: #333;
+            --border-color: #ddd;
+            --success-color: #28a745;
+            --highlight-color: #fff3cd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f4f9f9; /* Nền hơi xanh nhạt */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            background: var(--secondary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            min-width: 200px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .template-box {
+            background-color: #f0f7f7;
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .sample-box {
+            display: none;
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            white-space: pre-line;
+        }
+
+        .toggle-sample-btn {
+            background: none;
+            border: 1px solid #ffc107;
+            color: #d39e00;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.85em;
+            transition: background 0.2s;
+        }
+
+        .toggle-sample-btn:hover {
+            background: #fff3cd;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(43, 122, 120, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        button.main-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.1s;
+        }
+
+        button.main-btn:active {
+            transform: scale(0.98);
+        }
+
+        #previewBtn { background-color: #17a2b8; }
+        #exportBtn { background-color: var(--success-color); }
+        #clearStorageBtn { background-color: #dc3545; font-size: 0.8em; padding: 5px 10px; margin-left: auto;}
+
+        /* --- STYLES CHO PHẦN PREVIEW TƯƠNG TÁC --- */
+        #interactiveResultArea {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #fff;
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        #interactiveResultArea h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        #textContent {
+            font-size: 1.15em;
+            line-height: 1.8;
+            color: #2c3e50;
+            white-space: pre-wrap;
+        }
+
+        .word-span {
+            cursor: pointer;
+            padding: 2px 0;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .word-span:hover {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .word-span:active {
+            background-color: #ffc107;
+        }
+
+        .note-text {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 15px;
+            font-style: italic;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📦 IELTS Speaking Part 2: Object Description</h1>
+
+    <div class="controls">
+        <label for="topicSelect"><strong>Chọn mẫu tham khảo (Samples):</strong></label>
+        <select id="topicSelect" onchange="loadSamples()">
+            <option value="clothing">A piece of clothing (Áo khoác da)</option>
+            <option value="instrument">A musical instrument (Đàn Piano)</option>
+            <option value="appliance">A household appliance (Máy pha cà phê)</option>
+        </select>
+        <button id="clearStorageBtn" onclick="clearMyData()">🗑️ Xóa dữ liệu đã lưu</button>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">1. Introduction (What it is)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-intro')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "Well, this topic reminds me of [Tên đồ vật], a/an [loại đồ vật] that I [sở hữu / vô cùng yêu thích / luôn muốn học]."
+        </div>
+        <div id="sample-intro" class="sample-box"></div>
+        <textarea id="input-intro" placeholder="Giới thiệu đồ vật đó là gì..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">2. Acquisition / Origin (When & Where / How you learned)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-origin')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "If memory serves me right, I got my hands on it / first learned about it [Thời gian / Hoàn cảnh]. It was a [món quà / lần tình cờ thấy / món đồ mua được]..."
+        </div>
+        <div id="sample-origin" class="sample-box"></div>
+        <textarea id="input-origin" placeholder="Bạn có nó khi nào, ở đâu / Bạn biết đến nó như thế nào..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">3. Usage & Functionality (How it works / How often / What you need)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-usage')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "Speaking of its features and how often I use it... I typically use it [Tần suất] để [Mục đích]. / To actually play/use it, I would need to..."
+        </div>
+        <div id="sample-usage" class="sample-box"></div>
+        <textarea id="input-usage" placeholder="Cách hoạt động, tần suất sử dụng, hoặc những gì cần làm để sử dụng nó..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">4. Importance & Feelings (Why you like / Why it's important)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-imp')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "There are several reasons why this [đồ vật] is so important to me / why I'm so keen on it. First and foremost, [Lý do 1]. Moreover, [Lý do 2]..."
+        </div>
+        <div id="sample-imp" class="sample-box"></div>
+        <textarea id="input-imp" placeholder="Giải thích lý do tại sao nó quan trọng với bạn hoặc tại sao bạn thích nó..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">5. Conclusion (Kết bài)</span>
+            <button class="toggle-sample-btn" onclick="toggleSample('sample-con')">👁️ Xem bài mẫu</button>
+        </div>
+        <div class="template-box">
+            <strong>Template:</strong> "All in all, whenever I think about a significant [appliance / clothing / instrument], [Tên đồ vật] is undeniably the first thing that comes to mind."
+        </div>
+        <div id="sample-con" class="sample-box"></div>
+        <textarea id="input-con" placeholder="Kết luận ngắn gọn..." oninput="autoSaveData()"></textarea>
+    </div>
+
+    <div class="action-buttons">
+        <button id="previewBtn" class="main-btn" onclick="generateInteractivePreview()">🔊 Preview & Speak</button>
+        <button id="exportBtn" class="main-btn" onclick="exportToDoc()">💾 Xuất file Word</button>
+    </div>
+
+    <div id="interactiveResultArea">
+        <h3>🎙️ Khu vực luyện tập (Interactive Area)</h3>
+        <div id="textContent"></div>
+        <div class="note-text">👉 Click vào từ để nghe phát âm. Hỗ trợ song ngữ Anh/Trung tự động. <br>👉 Bôi đen một câu/cụm từ để nghe cả đoạn.</div>
+    </div>
+</div>
+
+<script>
+    // --- 1. CONFIGURATION & DATA ---
+    const samples = {
+        clothing: { 
+            intro: "Well, this topic reminds me of my black leather jacket, an item of clothing that I absolutely love wearing. It is a classic biker-style jacket that never really goes out of fashion.", 
+            origin: "If memory serves me right, I purchased it about three years ago at a vintage boutique during a trip to Da Lat. I was casually browsing through the racks when it immediately caught my eye. Fortunately, it was on sale, so I got it at a very reasonable price.", 
+            usage: "Speaking of how often I wear it, it is my absolute go-to outerwear during the colder months or whenever I ride my motorbike. It fits me perfectly and provides great wind protection. On top of that, it pairs well with almost anything in my wardrobe, from simple T-shirts to casual jeans.", 
+            imp: "There are several reasons why this jacket is so special to me. First and foremost, it keeps me incredibly warm while making me look quite stylish and edgy. Moreover, it holds great sentimental value because it reminds me of that fantastic trip with my close friends.", 
+            con: "All in all, whenever I think about my favorite piece of clothing, this leather jacket is undeniably the first thing that comes to mind." 
+        },
+        instrument: { 
+            intro: "Well, this topic reminds me of the piano, a beautiful musical instrument that I have always wanted to learn how to play. To me, it is the king of all instruments due to its wide tonal range.", 
+            origin: "I first fell in love with it when I was a child, watching a mesmerizing performance by a famous pianist on television. Since then, I have been captivated by its soothing and elegant melodies. However, growing up, I never really had the opportunity or the resources to take formal lessons.", 
+            usage: "To actually play it, I know I would need to invest a lot of time in learning how to read sheet music and coordinating both of my hands independently. It requires immense patience and daily practice to build muscle memory. Although I don't own one yet, I often watch online tutorials to familiarize myself with the basic chords.", 
+            imp: "There are a few reasons why I am so keen on mastering this instrument. Primarily, I believe playing the piano is a fantastic way to relieve stress and express my inner emotions after a long day. Besides, it has always been a lifelong dream of mine to confidently perform a classical piece for my family.", 
+            con: "All in all, the piano stands out as the ultimate instrument I wish to conquer in the near future." 
+        },
+        appliance: { 
+            intro: "Well, this topic reminds me of my espresso machine, a modern household appliance that I use on a daily basis. It is a sleek, silver machine that sits proudly on my kitchen counter.", 
+            origin: "I got my hands on it about a year ago as a surprise birthday present from my colleagues. Before that, I used to spend a fortune buying coffee at local cafes every morning. It was exactly what I needed to upgrade my morning routine.", 
+            usage: "In terms of how it works and my usage frequency, I operate it every single morning without fail. It is quite user-friendly; I just need to pour in water, add some freshly ground coffee beans, and press a button. Within seconds, it extracts a perfect, rich shot of espresso to kickstart my day.", 
+            imp: "The main reason why this machine is indispensable to me is its absolute convenience. It saves me a significant amount of time and money, while still allowing me to enjoy high-quality coffee right in the comfort of my home. Furthermore, the pleasant aroma of brewing coffee really boosts my mood and energy for the day ahead.", 
+            con: "All in all, I honestly cannot imagine my daily life without this amazing appliance." 
+        }
+    };
+
+    const inputIds = ['input-intro', 'input-origin', 'input-usage', 'input-imp', 'input-con'];
+    
+    // Tạo Unique Key mới cho template Object
+    const storageKey = 'ielts_gen_object_data_' + window.location.pathname;
+
+    // --- 2. LOCAL STORAGE LOGIC ---
+    function autoSaveData() {
+        const dataToSave = {};
+        inputIds.forEach(id => {
+            dataToSave[id] = document.getElementById(id).value;
+        });
+        localStorage.setItem(storageKey, JSON.stringify(dataToSave));
+    }
+
+    function loadSavedData() {
+        const savedJSON = localStorage.getItem(storageKey);
+        if (savedJSON) {
+            const data = JSON.parse(savedJSON);
+            inputIds.forEach(id => {
+                if (data[id]) {
+                    document.getElementById(id).value = data[id];
+                }
+            });
+            console.log("Dữ liệu đã được tải lại từ: " + storageKey);
+        }
+    }
+
+    function clearMyData() {
+        if(confirm("Bạn có chắc muốn xóa toàn bộ nội dung đã lưu cho file này không?")) {
+            localStorage.removeItem(storageKey);
+            inputIds.forEach(id => document.getElementById(id).value = "");
+            document.getElementById('interactiveResultArea').style.display = "none";
+            alert("Đã xóa dữ liệu!");
+        }
+    }
+
+    // --- 3. CORE FUNCTIONS ---
+    function loadSamples() {
+        const topic = document.getElementById('topicSelect').value;
+        const data = samples[topic];
+        
+        document.getElementById('sample-intro').innerText = data.intro;
+        document.getElementById('sample-origin').innerText = data.origin;
+        document.getElementById('sample-usage').innerText = data.usage;
+        document.getElementById('sample-imp').innerText = data.imp;
+        document.getElementById('sample-con').innerText = data.con;
+    }
+
+    function toggleSample(id) {
+        const x = document.getElementById(id);
+        x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+
+    // --- 4. PREVIEW & TTS LOGIC ---
+    function generateInteractivePreview() {
+        const resultArea = document.getElementById('interactiveResultArea');
+        const contentDiv = document.getElementById('textContent');
+        let fullHtml = "";
+        let hasContent = false;
+
+        inputIds.forEach(id => {
+            const text = document.getElementById(id).value.trim();
+            if (text) {
+                hasContent = true;
+                const words = text.split(/\s+/); 
+                
+                const processedParagraph = words.map(word => {
+                    return `<span class="word-span" onclick="speakText('${escapeSingleQuotes(word)}')">${word}</span>`;
+                }).join(' ');
+
+                fullHtml += `<p>${processedParagraph}</p>`;
+            }
+        });
+
+        if (!hasContent) {
+            alert("Bạn hãy nhập nội dung trước khi bấm Preview nhé!");
+            return;
+        }
+
+        contentDiv.innerHTML = fullHtml;
+        resultArea.style.display = "block";
+        resultArea.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function escapeSingleQuotes(str) {
+        return str.replace(/'/g, "\'").replace(/[^\w\s',.!?-]/g, ""); 
+    }
+
+    // Hàm đọc Text - Hỗ trợ song ngữ (Anh/Trung) tùy thuộc vào dữ liệu đầu vào
+    function speakText(text) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Kiểm tra xem đoạn text có chứa ký tự tiếng Trung không
+        const isChinese = /[\u4e00-\u9fa5]/.test(text);
+        
+        utterance.lang = isChinese ? 'zh-CN' : 'en-US'; 
+        utterance.rate = 0.9; 
+        
+        window.speechSynthesis.speak(utterance);
+    }
+
+    document.getElementById('textContent').addEventListener('mouseup', function() {
+        const selection = window.getSelection();
+        const selectedText = selection.toString().trim();
+
+        if (selectedText.length > 0) {
+            speakText(selectedText);
+        }
+    });
+
+    // --- 5. EXPORT LOGIC ---
+    function exportToDoc() {
+        let content = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Speaking Part 2 - Object</title></head><body>";
+        content += "<h1 style='color:#2b7a78'>IELTS Speaking Part 2 - Object Description</h1>";
+        
+        let hasContent = false;
+        inputIds.forEach(id => {
+            const val = document.getElementById(id).value;
+            if(val.trim()) {
+                hasContent = true;
+                let title = "";
+                if(id.includes('intro')) title = "1. Introduction";
+                if(id.includes('origin')) title = "2. Acquisition / Origin";
+                if(id.includes('usage')) title = "3. Usage & Functionality";
+                if(id.includes('imp')) title = "4. Importance & Feelings";
+                if(id.includes('con')) title = "5. Conclusion";
+
+                content += `<h3 style='color:#555'>${title}</h3><p>${val}</p>`;
+            }
+        });
+
+        if (!hasContent) {
+            alert("Bạn hãy nhập nội dung trước khi xuất file nhé!");
+            return;
+        }
+        content += "</body></html>";
+
+        const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'My_Speaking_Object.doc';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // --- INIT ---
+    window.onload = function() {
+        loadSamples();
+        loadSavedData();
+    };
+
+</script>
+
+</body>
+</html>
